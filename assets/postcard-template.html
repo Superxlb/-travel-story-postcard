@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{TITLE}} · 旅行故事明信片</title>
+  <style>
+    :root { color-scheme: light; --paper: #fff9ee; --ink: #283e45; --accent: #92543e; }
+    * { box-sizing: border-box; }
+    body { margin: 0; padding: 42px 28px; background: #eee9df; color: var(--ink); font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif; }
+    .masthead, main, .page-note { max-width: 1140px; margin-inline: auto; }
+    .masthead { display: flex; justify-content: space-between; gap: 20px; align-items: baseline; margin-bottom: 24px; }
+    .brand { font-size: 14px; letter-spacing: .16em; }
+    .edition { font-size: 11px; letter-spacing: .14em; color: #655f54; }
+    main { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; align-items: start; }
+    .card { min-width: 0; background: var(--paper); box-shadow: 0 12px 32px #283e4512; border: 1px solid #d8d0c2; }
+    .front { padding: 18px; }
+    .photo { margin: 0; background: #283e45; display: grid; place-items: center; min-height: 240px; }
+    .photo img { display: block; width: 100%; height: 400px; object-fit: contain; }
+    .missing { color: #fff9ee; padding: 40px 24px; line-height: 1.8; }
+    .front-copy { padding: 24px 12px 12px; }
+    .eyebrow { margin: 0 0 14px; font-size: 10px; letter-spacing: .22em; color: var(--accent); }
+    h1 { margin: 0 0 12px; font: 500 clamp(26px, 3vw, 36px)/1.4 "Songti SC", "SimSun", serif; overflow-wrap: anywhere; }
+    .caption { margin: 0; font-size: 15px; line-height: 1.8; overflow-wrap: anywhere; }
+    .back { padding: 34px; }
+    .back-top { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-bottom: 24px; border-bottom: 1px solid #d8d0c2; }
+    .stamp { border: 1px dashed #92543e; padding: 12px 10px; font: 12px/1.5 "Songti SC", "SimSun", serif; letter-spacing: .2em; }
+    .to { margin: 0; font-size: 20px; font-family: "Songti SC", "SimSun", serif; overflow-wrap: anywhere; }
+    .story { margin-block: 28px; font-size: 16px; line-height: 2.05; overflow-wrap: anywhere; }
+    .story p { margin: 0 0 1em; }
+    .wish { border-left: 2px solid var(--accent); padding-left: 16px; font-size: 15px; line-height: 1.9; overflow-wrap: anywhere; }
+    .meta { margin-top: 28px; text-align: right; font-size: 13px; line-height: 1.9; overflow-wrap: anywhere; }
+    .meta:empty { display: none; }
+    .page-note { margin-top: 24px; font-size: 11px; line-height: 1.9; color: #655f54; overflow-wrap: anywhere; }
+    @media (max-width: 760px) {
+      body { padding: 24px 16px; } main { grid-template-columns: 1fr; gap: 20px; }
+      .masthead { flex-wrap: wrap; gap: 6px; } .back { padding: 26px 22px; }
+      .photo img { height: auto; max-height: 500px; object-fit: contain; }
+    }
+    @page { size: A4; margin: 14mm; }
+    @media print {
+      body { padding: 0; background: white; color: #17282e; }
+      .masthead, .page-note { display: none; } main { display: block; max-width: none; }
+      .card { box-shadow: none; margin-bottom: 8mm; break-inside: avoid; }
+      .photo img { height: 90mm; } .front-copy { padding-top: 5mm; }
+      .back { padding: 8mm; } .story { margin-block: 5mm; line-height: 1.8; }
+      .story p { orphans: 3; widows: 3; } .meta { margin-top: 5mm; }
+    }
+  </style>
+</head>
+<body>
+  <header class="masthead"><span class="brand">把风景寄给你</span><span class="edition">TRAVEL STORY / POSTCARD</span></header>
+  <main aria-label="明信片正面和背面">
+    <section class="card front" aria-label="明信片正面">
+      <figure class="photo">{{PHOTO_HTML}}</figure>
+      <div class="front-copy"><p class="eyebrow">一张照片，一封短笺</p><h1>{{TITLE}}</h1><p class="caption">{{CAPTION}}</p></div>
+    </section>
+    <section class="card back" aria-label="明信片背面">
+      <div class="back-top"><p class="to">致 {{RECIPIENT}}</p><span class="stamp" aria-hidden="true">风景<br>邮局</span></div>
+      <div class="story">{{STORY_HTML}}</div>
+      <p class="wish">{{WISH}}</p>
+      <footer class="meta">{{META_HTML}}</footer>
+    </section>
+  </main>
+  <footer class="page-note">{{CREDIT}}</footer>
+</body>
+</html>
