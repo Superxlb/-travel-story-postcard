@@ -2,7 +2,11 @@
 
 **一张旅行照片，一句心情，写给一个具体的人。**
 
-`travel-story-postcard` 将原照片的细节写进标题、照片短句、背面故事和寄语，并根据照片设计排版。可以同图更换收件人、改语气、改长度或换布局；请求制作明信片且环境支持文件生成时，默认交付可离线打开的 HTML 成品。明确只要文案时只写文字。
+`travel-story-postcard` 将原照片的细节写进标题、照片短句、背面故事和寄语，并根据照片设计排版。可以同图更换收件人、改语气、改长度或换布局；环境支持文件与截图能力时，默认交付正面 PNG、背面 PNG、总览图和可离线打开的 HTML。明确只要文案时只写文字。
+
+**1.3.0：默认交付固定排版的图片。** 正面图含照片、标题和短句；背面图含故事、寄语与收件人；总览图方便检查。PNG 打开时不会重新排版，HTML 用于继续修改。截图前等待字体和图片加载，检查溢出；如果当前环境不能截图，会明确说明 PNG 未生成。
+
+[正面 PNG](demo/png/postcard-front.png) · [背面 PNG](demo/png/postcard-back.png) · [总览 PNG](demo/png/postcard-overview.png)
 
 **1.1.0：版式按照片设计，不固定套用 HTML。** 智能体可以重新编写结构与样式，渲染脚本通过 `--template` 接受任意本地创作的兼容模板；内置模板仅作参考和保底。此处是生成时重新设计，不是打开页面后随机变换。
 
@@ -27,7 +31,7 @@ GitHub 的文件页通常展示源码；请下载仓库后用浏览器打开 HTM
 | 必需：一张可读取照片，或明确的画面描述 | 一份完整明信片：标题、短句、故事、寄语与收件人 |
 | 可选：心情、收件人、风格 | 适合关系和语气的原创表达 |
 | 可选：地点、日期、署名 | 仅显示你给出的项目，不猜城市、不补日期 |
-| 请求制作明信片（环境支持文件生成） | 同页展开正反面的 HTML 成品与打印样式；无法生成时说明限制并交付文案 |
+| 请求制作明信片（环境支持生成与截图） | 正面/背面/总览 PNG 与 HTML；能力不足时说明缺少哪些成品 |
 
 默认寄给未来的自己，简体中文、温柔自然克制；没有心情时平实记录。支持温柔治愈、轻快俏皮、复古书信、简洁纪实。普通旅游攻略、订酒店、路线规划、纯修图不属于触发范围。
 
@@ -64,6 +68,8 @@ GitHub 的文件页通常展示源码；请下载仓库后用浏览器打开 HTM
 
 > 用刚才的文案和原照片生成 HTML 明信片，正反面同时显示，尽量嵌图为单文件。
 
+> 请把最终明信片正面和背面分别导出为 PNG，并直接展示图片，HTML 也保留。
+
 换版式：
 
 > 照片和文字都不变，重新设计排版。这次让照片更大，标题放侧边，背面在下方展开，用清爽的海蓝色。
@@ -91,6 +97,7 @@ python scripts/render_postcard.py --data demo/photo-adjusted-content.json --imag
 - 文案：宿主智能体的语言能力；使用照片时还需读图能力。没有读图能力时可用明确的描述。本技能不额外调用付费 API、账号服务或网络；宿主本身的费用、联网与模型能力不由本包控制。
 - 已生成 HTML：现代浏览器即可，图片已嵌入，无在线资源、无 JavaScript。
 - 可选渲染脚本：Python 3.8+，仅标准库。它负责转义与嵌图，不自动识图或写故事。
+- PNG：优先使用宿主现有浏览器截图工具。可选导出脚本需要 Node.js 20+、Playwright 与 Chromium/Chrome/Edge；这项依赖不影响文案和 HTML。[导出与依赖说明](references/png-export.md)。
 
 从仓库根目录运行（选择尚不存在的输出文件）：
 
@@ -106,6 +113,14 @@ python scripts/render_postcard.py --data demo/example-content.json --image demo/
 python scripts/render_postcard.py --data demo/example-content.json --image demo/sample.jpg --template demo/editorial-template.html --output outputs/custom-postcard.html
 ```
 
+依赖可用时导出图片（不会覆盖已有输出）：
+
+```sh
+node scripts/export_postcard.cjs --html outputs/custom-postcard.html --output-dir outputs/png
+```
+
+默认输出 `postcard-front.png`、`postcard-back.png`、`postcard-overview.png` 和对应 HTML 哈希记录。2 倍像素导出固定的是当前浏览器排版，不承诺专业印刷规格。
+
 ## 仓库内容
 
 ```text
@@ -118,10 +133,15 @@ travel-story-postcard/
 │   ├── examples.md
 │   ├── html-guide.md
 │   ├── layout-design.md
-│   └── photo-adjustments.md
+│   ├── photo-adjustments.md
+│   └── png-export.md
 ├── assets/postcard-template.html
-├── scripts/render_postcard.py
-├── tests/test_renderer.py
+├── scripts/
+│   ├── render_postcard.py
+│   └── export_postcard.cjs
+├── tests/
+│   ├── test_renderer.py
+│   └── test_export.cjs
 └── demo/
     ├── sample.jpg
     ├── PHOTO-LICENSE.md
@@ -133,7 +153,12 @@ travel-story-postcard/
     ├── preview-editorial.png
     ├── photo-adjusted-content.json
     ├── photo-adjusted-postcard.html
-    └── preview-photo-adjusted.png
+    ├── preview-photo-adjusted.png
+    └── png/
+        ├── postcard-front.png
+        ├── postcard-back.png
+        ├── postcard-overview.png
+        └── postcard-export.json
 ```
 
 `examples.md` 是假设画面下的写作参考；模板含待替换变量；`demo/` 是真实公开照片与已填好的演示成品，三者不可混称。
@@ -141,6 +166,8 @@ travel-story-postcard/
 ## 测试与公开交付
 
 运行脚本检查：`python -m unittest discover -s tests -v`。实际浏览器检查、文本行为检查和未完成的 WorkBuddy 集成验证，分别列在 [VALIDATION.md](VALIDATION.md)。这不是专业印刷包；普通浏览器打印结果需要检查分页。
+
+可选浏览器导出检查：`node tests/test_export.cjs 实际浏览器路径`，验证真实截图、拒绝覆盖及坏图/外部资源/缺失区域/溢出的失败处理。测试环境需具备上述 PNG 依赖。
 
 照片为 CC0 授权，作者与来源见 [PHOTO-LICENSE.md](demo/PHOTO-LICENSE.md)。演示文字的心情为课堂设定，不含私人经历。个人照片和私人内容请放在仓库外或已忽略的 `private/`、`outputs/`，公开发布前仍应复核待提交文件。
 

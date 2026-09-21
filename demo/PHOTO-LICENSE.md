@@ -11,6 +11,8 @@
 
 用途：随 Skill 仓库公开交付，并嵌入 `example-postcard.html`、`editorial-postcard.html` 和 `photo-adjusted-postcard.html`。页面预览截图中的照片也使用同一授权；显示调整版本仅用 CSS 调整不透明度、适配和圆角，原始 JPEG 字节未修改。
 
+`demo/png/` 中正面、背面与总览 PNG 为 `photo-adjusted-postcard.html` 的浏览器导出结果，涉及的照片沿用同一 CC0 授权。
+
 实际读图确认的内容：左侧低位太阳、橙红天空、深色海面、白色浪花、前景岩石。**画面没有可确认的脚印**，不可把假设示例的脚印带入这张照片。没有可识别人物或私人资料。
 
 演示设定“旅行最后一天，有点舍不得”是课堂输入，不是对摄影者经历的判断。示例不填写实际城市、日期和署名。`example-content.json` 是本次人工/模型创作的已填数据，渲染脚本不会自动识图或创作文案。

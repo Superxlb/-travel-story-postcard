@@ -51,11 +51,11 @@
 <body>
   <header class="masthead"><span class="brand">把风景寄给你</span><span class="edition">TRAVEL STORY / POSTCARD</span></header>
   <main aria-label="明信片正面和背面">
-    <section class="card front" aria-label="明信片正面">
+    <section class="card front" data-postcard-side="front" aria-label="明信片正面">
       <figure class="photo">{{PHOTO_HTML}}</figure>
       <div class="front-copy"><p class="eyebrow">一张照片，一封短笺</p><h1>{{TITLE}}</h1><p class="caption">{{CAPTION}}</p></div>
     </section>
-    <section class="card back" aria-label="明信片背面">
+    <section class="card back" data-postcard-side="back" aria-label="明信片背面">
       <div class="back-top"><p class="to">致 {{RECIPIENT}}</p><span class="stamp" aria-hidden="true">风景<br>邮局</span></div>
       <div class="story">{{STORY_HTML}}</div>
       <p class="wish">{{WISH}}</p>

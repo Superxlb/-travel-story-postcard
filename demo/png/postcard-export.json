@@ -1,0 +1,25 @@
+{
+  "source": "photo-adjusted-postcard.html",
+  "source_sha256": "56afbd3f6b8c3a10f27b7af892dd4003114a3fee3b2ba28e3fe1cee1399c319f",
+  "viewport_width": 1440,
+  "scale": 2,
+  "browser": "153.0.8010.48",
+  "external_requests": 0,
+  "files": [
+    {
+      "name": "postcard-front.png",
+      "width": 2320,
+      "height": 2078
+    },
+    {
+      "name": "postcard-back.png",
+      "width": 2320,
+      "height": 516
+    },
+    {
+      "name": "postcard-overview.png",
+      "width": 2320,
+      "height": 2640
+    }
+  ]
+}

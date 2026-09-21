@@ -8,6 +8,8 @@
 
 模板须包含下表全部变量，可改变任意结构与样式，也可重复放置同一变量。模板由智能体本地创作、审阅，不把用户正文作为模板代码；模板自身的离线性和响应式效果需要单独检查。
 
+为导出独立照片页与文字页，完整正背面容器需分别带 `data-postcard-side="front"` / `"back"`（兼容对应中文 aria-label），并由唯一 main 包裹。截图标记不限制排版自由。
+
 ```sh
 python scripts/render_postcard.py --data demo/example-content.json --image demo/sample.jpg --template demo/editorial-template.html --output outputs/new-layout.html
 ```
@@ -54,3 +56,5 @@ python scripts/render_postcard.py --data demo/example-content.json --image demo/
 保底模板采用奶白 `#fff9ee`、深蓝灰 `#283e45`、陶土 `#92543e`，是推荐配色，不是照片采样。新设计可另选配色与结构，写入受信任的本次模板后再生成新文件。照片保留全幅，可使用自然宽高或 contain，不拉伸主体。正文不设会截断内容的固定高度或隐藏溢出。
 
 打开成品检查照片、中文、桌面/手机宽度与打印预览。打印是普通浏览器 A4 排版，不代表专业明信片印刷标准；长文可能跨页，需检查分页。不支持预览时如实说明只完成静态检查。浏览器无需联网，模型创作本身是否可离线由宿主决定。
+
+成品检查后默认按 [PNG 导出说明](png-export.md) 生成正面、背面及总览图，并在结果中实际展示。保留 HTML 供修改；只交付 HTML 不等于已完成图片导出。图片是最终渲染的快照，后续改文案或照片效果须重新截图。

@@ -57,11 +57,11 @@
 <div class="page">
   <header class="masthead"><span>把风景寄给你</span><span>一封寄给以后的信</span></header>
   <main>
-    <section class="front" aria-label="明信片正面">
+    <section class="front" data-postcard-side="front" aria-label="明信片正面">
       <figure class="photo">{{PHOTO_HTML}}</figure>
       <div class="front-copy"><p class="eyebrow">把此刻留下<br>TRAVEL POSTCARD</p><h1>{{TITLE}}</h1><p class="caption">{{CAPTION}}</p></div>
     </section>
-    <section class="back" aria-label="明信片背面">
+    <section class="back" data-postcard-side="back" aria-label="明信片背面">
       <div class="address"><p class="eyebrow">这封短笺，寄给</p><p class="recipient">{{RECIPIENT}}</p><div class="small-rule"></div><p class="back-label">照片背后的几句话</p></div>
       <div class="letter"><div class="story">{{STORY_HTML}}</div><p class="wish">{{WISH}}</p><footer class="meta">{{META_HTML}}</footer></div>
     </section>
