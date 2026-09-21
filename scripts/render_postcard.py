@@ -30,9 +30,9 @@ def image_kind(data):
     raise ValueError("Unsupported image: use an actual JPEG, PNG, GIF, or WebP file.")
 
 
-def render(data_path, output, image_path=None, image_mode="embed", description_only=False):
+def render(data_path, output, image_path=None, image_mode="embed", description_only=False, template_path=None):
     data_path, output = Path(data_path).resolve(), Path(output).resolve()
-    template_path = ROOT / "assets" / "postcard-template.html"
+    template_path = Path(template_path).resolve() if template_path else ROOT / "assets" / "postcard-template.html"
     if output.suffix.lower() != ".html":
         raise ValueError("Output must use .html.")
     if output.exists():
@@ -98,9 +98,10 @@ def main():
     group.add_argument("--image", help="Local JPEG/PNG/GIF/WebP")
     group.add_argument("--description-only", action="store_true")
     parser.add_argument("--image-mode", choices=("embed", "relative"), default="embed")
+    parser.add_argument("--template", help="Locally authored HTML layout; default is the fallback template")
     args = parser.parse_args()
     try:
-        result = render(args.data, args.output, args.image, args.image_mode, args.description_only)
+        result = render(args.data, args.output, args.image, args.image_mode, args.description_only, args.template)
     except (OSError, ValueError) as error:
         print("Cannot render: " + str(error), file=sys.stderr)
         return 1

@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{TITLE}} · 把风景寄给你</title>
+<style>
+  :root { color-scheme:light; --paper:#fbfaf5; --ink:#263e45; --accent:#486c75; --line:#c5d1cf; }
+  * { box-sizing:border-box; }
+  body { margin:0; padding:36px 28px 48px; background:#e7eeec; color:var(--ink); font-family:"PingFang SC","Microsoft YaHei",sans-serif; }
+  .page { max-width:1160px; margin:0 auto; }
+  .masthead { display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap; padding-bottom:18px; font-size:12px; letter-spacing:.16em; }
+  .front { display:grid; grid-template-columns:minmax(0,1.7fr) minmax(0,.8fr); background:var(--paper); border:1px solid var(--line); }
+  .photo { margin:0; padding:20px; min-width:0; display:grid; align-items:center; background:#d7e2df; }
+  .photo img { display:block; width:100%; height:auto; max-height:620px; object-fit:contain; }
+  .missing { padding:50px 20px; line-height:1.9; }
+  .front-copy { display:flex; flex-direction:column; justify-content:center; padding:38px 30px; border-left:1px solid var(--line); }
+  .eyebrow { font-size:11px; letter-spacing:.2em; color:var(--accent); line-height:1.8; margin:0 0 38px; }
+  h1 { margin:0; font:500 clamp(30px,3.3vw,48px)/1.55 "Songti SC","SimSun",serif; letter-spacing:.08em; overflow-wrap:anywhere; }
+  .caption { margin:30px 0 0; padding-top:22px; border-top:1px solid var(--line); font-size:14px; line-height:1.9; overflow-wrap:anywhere; }
+  .back { margin-top:24px; border:1px solid var(--line); background:var(--paper); padding:32px 40px; display:grid; grid-template-columns:minmax(0,.8fr) minmax(0,1.7fr); gap:40px; }
+  .address { padding-right:28px; border-right:1px solid var(--line); }
+  .address .eyebrow { margin-bottom:18px; }
+  .recipient { font:400 26px/1.6 "Songti SC","SimSun",serif; margin:0; overflow-wrap:anywhere; }
+  .small-rule { width:36px; height:3px; background:#aa8156; margin:25px 0; }
+  .back-label { font-size:11px; color:var(--accent); letter-spacing:.15em; line-height:1.9; }
+  .letter { min-width:0; }
+  .story { font-size:15px; line-height:2; overflow-wrap:anywhere; }
+  .story p { margin:0 0 1em; }
+  .wish { margin:24px 0 0; font:500 17px/1.9 "Songti SC","SimSun",serif; overflow-wrap:anywhere; }
+  .meta { margin-top:20px; text-align:right; font-size:13px; line-height:1.9; overflow-wrap:anywhere; }
+  .meta:empty { display:none; }
+  .credit { font-size:11px; color:var(--accent); margin:20px 0 0; line-height:1.8; overflow-wrap:anywhere; }
+  .credit:empty { display:none; }
+  @media(max-width:760px) {
+    body { padding:20px 14px 30px; } .front,.back { grid-template-columns:1fr; }
+    .photo { padding:12px; } .photo img { max-height:none; }
+    .front-copy { border-left:0; padding:24px; } .eyebrow { margin-bottom:14px; }
+    h1 { font-size:32px; } .caption { margin-top:18px; padding-top:16px; }
+    .back { padding:26px 24px; gap:24px; } .address { border-right:0; border-bottom:1px solid var(--line); padding:0 0 20px; }
+    .small-rule,.back-label { display:none; }
+  }
+  @page { size:A4; margin:12mm; }
+  @media print {
+    body { background:white; padding:0; } .masthead,.credit { display:none; }
+    .front { grid-template-columns:minmax(0,1.7fr) minmax(0,.8fr); break-inside:avoid; }
+    .photo { padding:4mm; } .photo img { max-height:95mm; }
+    .front-copy { padding:5mm; } h1 { font-size:26px; } .eyebrow { margin-bottom:5mm; }
+    .caption { margin-top:5mm; padding-top:4mm; font-size:12px; }
+    .back { margin-top:6mm; padding:6mm; gap:6mm; grid-template-columns:minmax(0,.7fr) minmax(0,1.8fr); break-inside:avoid; }
+    .address { padding-right:5mm; } .recipient { font-size:20px; } .story { font-size:12px; line-height:1.9; }
+    .story p { orphans:3; widows:3; } .wish { font-size:14px; margin-top:4mm; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <header class="masthead"><span>把风景寄给你</span><span>一封寄给以后的信</span></header>
+  <main>
+    <section class="front" aria-label="明信片正面">
+      <figure class="photo">{{PHOTO_HTML}}</figure>
+      <div class="front-copy"><p class="eyebrow">把此刻留下<br>TRAVEL POSTCARD</p><h1>{{TITLE}}</h1><p class="caption">{{CAPTION}}</p></div>
+    </section>
+    <section class="back" aria-label="明信片背面">
+      <div class="address"><p class="eyebrow">这封短笺，寄给</p><p class="recipient">{{RECIPIENT}}</p><div class="small-rule"></div><p class="back-label">照片背后的几句话</p></div>
+      <div class="letter"><div class="story">{{STORY_HTML}}</div><p class="wish">{{WISH}}</p><footer class="meta">{{META_HTML}}</footer></div>
+    </section>
+  </main>
+  <footer class="credit">{{CREDIT}}</footer>
+</div>
+</body>
+</html>

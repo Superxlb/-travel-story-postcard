@@ -107,6 +107,22 @@ class RendererTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             renderer.render(data_file, self.path / "missing.html")
 
+    def test_custom_layout_keeps_content_escaped_and_changes_structure(self):
+        self.data['title'] = '<b>literal title</b>'
+        _, doc = self.render(template_path=ROOT / 'demo' / 'editorial-template.html')
+        self.assertNotIn('b', doc.tags)
+        self.assertIn('<b>literal title</b>', ''.join(doc.text))
+        self.assertTrue(any(a.get('class') == 'address' for _, a in doc.attributes))
+        self.assertFalse(any(a.get('class') == 'back-top' for _, a in doc.attributes))
+        self.assertIn(self.data['wish'], ''.join(doc.text))
+
+    def test_custom_template_must_account_for_all_fields(self):
+        broken = self.path / 'broken.html'
+        broken.write_text('<html>{{TITLE}}</html>', encoding='utf-8')
+        with self.assertRaises(ValueError):
+            self.render(template_path=broken)
+        self.assertFalse((self.path / '我的成品.html').exists())
+
 
 if __name__ == "__main__":
     unittest.main()

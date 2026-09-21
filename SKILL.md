@@ -1,16 +1,16 @@
 ---
 name: travel-story-postcard
 display_name: 把风景寄给你｜旅行故事明信片
-description: 根据旅行照片或明确的画面描述创作故事明信片，生成标题、照片短句、背面故事、寄语与排版建议；支持同图改收件人、语气和长度，以及可选的本地 HTML 成品。适用于“把照片做成明信片”“寄给妈妈”“给照片写背面文字”等明确创作请求，不用于普通攻略、订房、路线规划或纯图片修复。
-description_zh: 把一张旅行照片和一句心情写成给特定收件人的故事明信片，可选生成离线 HTML。
-description_en: Create a personal travel postcard from a photo or scene description, with recipient-aware writing, layout advice, and optional offline HTML.
-version: 1.0.0
+description: 根据旅行照片或明确的画面描述创作故事明信片，生成标题、短句、故事和寄语，并按照片构图设计可变化的布局；有文件能力时制作本地 HTML 成品，支持同图改收件人、语气或排版。适用于“把照片做成明信片”“寄给妈妈”“给照片写背面文字”等明确请求，不用于普通攻略、订房、路线规划或纯图片修复。
+description_zh: 把旅行照片和心情制作成故事明信片，按画面重新设计布局，也可只写文案。
+description_en: Create travel postcards with recipient-aware writing and photo-specific layouts; produce offline HTML when supported, or copy only when requested.
+version: 1.1.0
 author: travel-story-postcard contributors
 ---
 
 # 把风景寄给你｜旅行故事明信片
 
-先完成一份与画面有关的中文作品，再按需增强为成品。文案不依赖额外 API、外部账号或搜索；模型与读图能力由宿主提供。
+根据照片完成文字与视觉设计。用户说“做/写一张明信片”时，有文件能力就默认交付可打开的成品，不要求用户再说 HTML；明确只要文案时仅交付文字。成品能力不可用时退回完整文案与排版建议并说明限制。文案不依赖额外 API、外部账号或搜索；模型与读图能力由宿主提供。
 
 ## 输入与最短交互
 
@@ -44,6 +44,8 @@ author: travel-story-postcard contributors
 
 优先照片和独立文字区。没有留白时，把字放边框、底部或背面。默认完整展示照片，避免截断主体。颜色称为“推荐配色”，未经工具提取不能说精确采样。正文用深浅反差明确的组合，不能只靠颜色传意。
 
+**版式不是固定模板。** 制作成品或用户要求换排版时，读取 [按照片设计布局](references/layout-design.md)，根据横竖比例、人物位置、景物与留白、文字长度和用户偏好决定结构。允许重新编写 HTML/CSS，改变图片大小、文字区位置、正反面排列、字体层次与颜色；不要只换配色冒充换版式，也不要为了随机变化牺牲可读性。排版建议必须与实际成品一致。
+
 ## 输出格式
 
 先用一句话说明收件人、语气和采用的具体画面细节；不要倾倒内部分析。然后：
@@ -67,19 +69,19 @@ author: travel-story-postcard contributors
 
 ## 多轮修改
 
-保留未要求变更的照片、信息与文字。改收件人时重新选择叙述重点，不只改称呼；保留标题重写正文、保留正文改排版、改长度或文风均依具体指令。换照片就重新读图，旧景物不能沿用。当前无法访问旧图或旧文案时说明缺什么，请用户补充，不假装记得。已生成 HTML 后修改正文，若用户仍需成品，要同步生成新文件，避免文字和文件不一致。
+保留未要求变更的照片、信息与文字。改收件人时重新选择叙述重点，不只改称呼；保留标题重写正文、保留正文改排版、改长度或文风均依具体指令。“换个排版”时保留文字，重新设计空间结构并生成新文件；“保持排版”时不擅自换版。换照片就重新读图，旧景物不能沿用。当前无法访问旧图或旧文案时说明缺什么，请用户补充，不假装记得。已有成品时修改正文需同步生成新文件，避免文字和文件不一致。
 
-## 可选 HTML：有需求、有能力才执行
+## HTML 成品：按照片设计，能力不足时降级
 
-用户明确要求预览、导出或可展示成品时，检查本地文件生成与原图访问能力；先交付文案，不让增强失败阻塞基本结果。
+用户请求制作明信片、预览或导出时，检查本地文件生成与原图访问能力。先形成文案，再完成排版；失败时交付已经完成的部分。用户明确只要文字时不生成文件。
 
-1. 读取 [模板](assets/postcard-template.html) 和 [填充说明](references/html-guide.md)。可用 Python 3.8+ 时，使用 [render_postcard.py](scripts/render_postcard.py) 做确定性转义和嵌图，无第三方运行依赖。按填充说明写 UTF-8 JSON，然后执行：
-   `python scripts/render_postcard.py --data 内容.json --image 原图.jpg --output 新成品.html`
+1. 读取 [填充说明](references/html-guide.md)，按照本次设计在输出目录编写新的 HTML/CSS 模板，保留规定的内容变量。[基础模板](assets/postcard-template.html) 仅作结构参考与能力不足时的保底，不是必须沿用的外观；[另一种结构示例](demo/editorial-template.html) 也不限制设计范围。可用 Python 3.8+ 时，使用 [render_postcard.py](scripts/render_postcard.py) 做确定性转义和嵌图。写 UTF-8 JSON，然后执行：
+   `python scripts/render_postcard.py --data 内容.json --image 原图.jpg --template 本次设计.html --output 新成品.html`
    路径以当前实际 Skill 根目录为基准，含空格时正确引用，不假设安装目录或工具名称。
 2. 没有 Python 但能写文件时，按照填充说明安全替换模板；所有用户文本转义，不能作为原始 HTML/CSS/脚本插入。照片来源只用读到的本地图片或其打包副本，不把远程 URL、绝对开发路径交付为依赖。
 3. 可读图片字节则优先嵌入 data URI，保留原图。大图可用脚本 `--image-mode relative` 复制到成品旁，一起打包。脚本仅支持 JPEG/PNG/GIF/WebP，其他格式无法处理时保留文案并说明限制，不伪装扩展名。
 4. 只有描述、没有原图时，不拿示例照片冒充。可以用 `--description-only` 明确生成标有“未附照片”的文字版，或只交付文案与排版。
-5. 正反面同时可见；宽屏并排、窄屏上下；系统中文字体，无 CDN、联网字体、图库或 JavaScript；默认 contain 完整展示；提供自动增高的正文和打印样式。排版可按当前照片调整，模板的配色只是起点。
+5. 正反面在同一页面展开，不依赖点击翻面；宽屏可并排或按设计上下展开，窄屏自动重排；系统中文字体，无 CDN、联网字体、图库或 JavaScript。用自然宽高或 contain 完整展示原图，默认不裁切；正文自动增高，长标题换行，并提供打印样式。不要往设计里添加未经提供的日期、地点、编号或私人经历。
 6. 检查无模板残留、图片有效、用户文本转义、无外部资源。能预览时检查中文、主体、桌面/窄屏溢出和打印；不能时列出实际静态检查，明确未视觉验证。不承诺专业印刷尺寸或印厂规格。
 
 生成失败就说明具体未完成项，保留已完成文案。不声称已生成图片、文件或下载链接。此技能不重新绘制、不风格化用户照片。

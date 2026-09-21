@@ -2,13 +2,19 @@
 
 **一张旅行照片，一句心情，写给一个具体的人。**
 
-`travel-story-postcard` 将原照片的细节写进标题、照片短句、背面故事和寄语，附上可执行的排版建议。可以同图更换收件人、改语气、改长度；需要时生成可离线打开的 HTML 成品。
+`travel-story-postcard` 将原照片的细节写进标题、照片短句、背面故事和寄语，并根据照片设计排版。可以同图更换收件人、改语气、改长度或换布局；请求制作明信片且环境支持文件生成时，默认交付可离线打开的 HTML 成品。明确只要文案时只写文字。
+
+**1.1.0：版式按照片设计，不固定套用 HTML。** 智能体可以重新编写结构与样式，渲染脚本通过 `--template` 接受任意本地创作的兼容模板；内置模板仅作参考和保底。此处是生成时重新设计，不是打开页面后随机变换。
 
 GitHub 仓库：[Superxlb/-travel-story-postcard](https://github.com/Superxlb/-travel-story-postcard)。仓库名称开头有一个连字符；Skill 标识和目录名仍为 `travel-story-postcard`。
 
 ![真实照片生成的示例成品](demo/preview-desktop.png)
 
 [查看示例 HTML 文件](demo/example-postcard.html) · [课堂演示说明](课堂演示说明.md) · [验证记录](VALIDATION.md)
+
+另一种排版结构：[照片与标题侧栏、背面下置](demo/editorial-postcard.html)。两个示例都使用仓库内 CC0 照片，不限定只能在这两种样式中选择。
+
+![另一种结构预览](demo/preview-editorial.png)
 
 GitHub 的文件页通常展示源码；请下载仓库后用浏览器打开 HTML。图片预览不是交互网页；仓库不依赖 GitHub Pages。
 
@@ -19,7 +25,7 @@ GitHub 的文件页通常展示源码；请下载仓库后用浏览器打开 HTM
 | 必需：一张可读取照片，或明确的画面描述 | 一份完整明信片：标题、短句、故事、寄语与收件人 |
 | 可选：心情、收件人、风格 | 适合关系和语气的原创表达 |
 | 可选：地点、日期、署名 | 仅显示你给出的项目，不猜城市、不补日期 |
-| 可选：要求 HTML 成品 | 同页展示正面和背面的本地文件及打印样式 |
+| 请求制作明信片（环境支持文件生成） | 同页展开正反面的 HTML 成品与打印样式；无法生成时说明限制并交付文案 |
 
 默认寄给未来的自己，简体中文、温柔自然克制；没有心情时平实记录。支持温柔治愈、轻快俏皮、复古书信、简洁纪实。普通旅游攻略、订酒店、路线规划、纯修图不属于触发范围。
 
@@ -56,6 +62,10 @@ GitHub 的文件页通常展示源码；请下载仓库后用浏览器打开 HTM
 
 > 用刚才的文案和原照片生成 HTML 明信片，正反面同时显示，尽量嵌图为单文件。
 
+换版式：
+
+> 照片和文字都不变，重新设计排版。这次让照片更大，标题放侧边，背面在下方展开，用清爽的海蓝色。
+
 不强制特定斜杠命令或 Codex 的 `$技能名` 语法；已加载状态以目标宿主实际显示和调用为准。
 
 ## 运行依赖与快速预览
@@ -72,6 +82,12 @@ python scripts/render_postcard.py --data demo/example-content.json --image demo/
 
 双击 `outputs/my-postcard.html` 即可浏览。大图可加 `--image-mode relative`，将 HTML 与生成的同名前缀照片一起交付；只有描述时用 `--description-only`，成品明确标示没有照片。[详细字段说明](references/html-guide.md)。
 
+上面的命令演示保底模板。使用本次重新设计的结构时，加 `--template 本次设计.html`；可运行例子：
+
+```sh
+python scripts/render_postcard.py --data demo/example-content.json --image demo/sample.jpg --template demo/editorial-template.html --output outputs/custom-postcard.html
+```
+
 ## 仓库内容
 
 ```text
@@ -82,7 +98,8 @@ travel-story-postcard/
 ├── 课堂演示说明.md
 ├── references/
 │   ├── examples.md
-│   └── html-guide.md
+│   ├── html-guide.md
+│   └── layout-design.md
 ├── assets/postcard-template.html
 ├── scripts/render_postcard.py
 ├── tests/test_renderer.py
@@ -91,7 +108,10 @@ travel-story-postcard/
     ├── PHOTO-LICENSE.md
     ├── example-content.json
     ├── example-postcard.html
-    └── preview-desktop.png
+    ├── preview-desktop.png
+    ├── editorial-template.html
+    ├── editorial-postcard.html
+    └── preview-editorial.png
 ```
 
 `examples.md` 是假设画面下的写作参考；模板含待替换变量；`demo/` 是真实公开照片与已填好的演示成品，三者不可混称。

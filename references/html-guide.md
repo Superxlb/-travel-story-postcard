@@ -1,6 +1,16 @@
 # HTML 填充说明
 
-仅在生成成品时读取。源模板允许 `{{变量}}`，最终 HTML 不得残留。模板不是示例成品；`demo/example-postcard.html` 才是完成的演示作品。
+仅在生成成品时读取。源模板允许 `{{变量}}`，最终 HTML 不得残留。模板不是示例成品；`demo/example-postcard.html` 和 `demo/editorial-postcard.html` 是两种结构的已完成演示作品。
+
+## 布局可以自由设计
+
+先按 [布局设计指南](layout-design.md) 决定结构，在本次输出目录写一个新的 HTML/CSS 模板，再用 `--template 本次设计.html` 指定。可以从空文件创作，也可改编现有模板；脚本只保证内容安全填充，不负责自动选版式或读图。`assets/postcard-template.html` 是省略该参数时的保底样式，不是唯一设计。
+
+模板须包含下表全部变量，可改变任意结构与样式，也可重复放置同一变量。模板由智能体本地创作、审阅，不把用户正文作为模板代码；模板自身的离线性和响应式效果需要单独检查。
+
+```sh
+python scripts/render_postcard.py --data demo/example-content.json --image demo/sample.jpg --template demo/editorial-template.html --output outputs/new-layout.html
+```
 
 ## 推荐：运行本地脚本
 
@@ -39,6 +49,6 @@ python scripts/render_postcard.py --data demo/example-content.json --image demo/
 
 ## 排版与交付
 
-默认奶白 `#fff9ee`、深蓝灰 `#283e45`、陶土 `#92543e`，是推荐配色，不是照片采样。若要修改，只改受信任的模板 CSS，再生成新文件。竖照保留全幅，宽屏正背面并列；横照也保持 contain，不拉伸主体。正文没有固定高度或隐藏溢出。
+保底模板采用奶白 `#fff9ee`、深蓝灰 `#283e45`、陶土 `#92543e`，是推荐配色，不是照片采样。新设计可另选配色与结构，写入受信任的本次模板后再生成新文件。照片保留全幅，可使用自然宽高或 contain，不拉伸主体。正文不设会截断内容的固定高度或隐藏溢出。
 
 打开成品检查照片、中文、桌面/手机宽度与打印预览。打印是普通浏览器 A4 排版，不代表专业明信片印刷标准；长文可能跨页，需检查分页。不支持预览时如实说明只完成静态检查。浏览器无需联网，模型创作本身是否可离线由宿主决定。
