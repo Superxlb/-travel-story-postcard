@@ -123,6 +123,43 @@ class RendererTests(unittest.TestCase):
             self.render(template_path=broken)
         self.assertFalse((self.path / '我的成品.html').exists())
 
+    def test_photo_display_keeps_original_bytes_and_text(self):
+        self.data['photo'] = {'opacity': 0.85, 'fit': 'contain', 'aspect_ratio': [4, 3], 'position': [40, 60], 'background': '#F7F3EA', 'radius': 16}
+        _, doc = self.render(template_path=ROOT / 'demo' / 'editorial-template.html')
+        attrs = next(a for tag, a in doc.attributes if tag == 'img')
+        self.assertEqual(base64.b64decode(attrs['src'].split(',', 1)[1]), self.source.read_bytes())
+        self.assertIn('opacity:0.85;', attrs['style'])
+        self.assertIn('object-fit:contain;', attrs['style'])
+        self.assertIn('object-position:40% 60%;', attrs['style'])
+        frame = next(a for _, a in doc.attributes if a.get('class') == 'postcard-photo-frame')
+        self.assertIn('aspect-ratio:4/3;', frame['style'])
+        self.assertNotIn('opacity:', frame['style'])
+        self.assertIn(self.data['wish'], ''.join(doc.text))
+
+    def test_cover_requires_explicit_frame(self):
+        with self.assertRaises(ValueError):
+            renderer.photo_markup('data:image/jpeg;base64,AA==', 'photo', {'fit': 'cover'})
+        result = renderer.photo_markup('data:image/jpeg;base64,AA==', 'photo', {'fit': 'cover', 'aspect_ratio': [16, 9]})
+        self.assertIn('object-fit:cover;', result)
+        self.assertIn('aspect-ratio:16/9;', result)
+
+    def test_invalid_photo_options_cannot_inject_css(self):
+        cases = [[], {'opacity': '0.8;display:none'}, {'opacity': True}, {'opacity': float('nan')},
+                 {'opacity': float('inf')}, {'opacity': -0.1}, {'opacity': 1.1}, {'fit': 'fill'},
+                 {'position': [50]}, {'position': [50, 101]}, {'position': ['left', 50]},
+                 {'background': '#fff;opacity:0'}, {'radius': -1}, {'aspect_ratio': [0, 3]},
+                 {'aspect_ratio': '4/3'}, {'style': 'background:url(https://example.com)'}]
+        for options in cases:
+            with self.subTest(options=options):
+                with self.assertRaises(ValueError):
+                    renderer.photo_markup('data:image/jpeg;base64,AA==', 'photo', options)
+
+    def test_photo_controls_reject_missing_photo(self):
+        self.data['photo'] = {'opacity': 0.85}
+        with self.assertRaises(ValueError):
+            self.render(image=False, description_only=True)
+        self.assertFalse((self.path / '我的成品.html').exists())
+
 
 if __name__ == "__main__":
     unittest.main()

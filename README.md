@@ -6,6 +6,8 @@
 
 **1.1.0：版式按照片设计，不固定套用 HTML。** 智能体可以重新编写结构与样式，渲染脚本通过 `--template` 接受任意本地创作的兼容模板；内置模板仅作参考和保底。此处是生成时重新设计，不是打开页面后随机变换。
 
+**1.2.0：支持照片显示调整。** 可以用自然语言调整透明程度、完整显示/铺满、对齐位置、图框比例、底色和圆角；保持文案和原图字节不变。铺满可能裁切，需检查主体；默认完整展示。这些是明信片内的显示效果，不是另存一张修改像素后的照片。
+
 GitHub 仓库：[Superxlb/-travel-story-postcard](https://github.com/Superxlb/-travel-story-postcard)。仓库名称开头有一个连字符；Skill 标识和目录名仍为 `travel-story-postcard`。
 
 ![真实照片生成的示例成品](demo/preview-desktop.png)
@@ -66,6 +68,22 @@ GitHub 的文件页通常展示源码；请下载仓库后用浏览器打开 HTM
 
 > 照片和文字都不变，重新设计排版。这次让照片更大，标题放侧边，背面在下方展开，用清爽的海蓝色。
 
+调整照片：
+
+> 文案和排版不变，把照片调淡一点，不透明度设为 85%，完整显示，加一点圆角。
+
+> 把照片放进 4:3 的框里，尽量铺满，但保留人物。如果会裁掉人物，就改成完整显示。
+
+> 恢复原图显示效果，取消透明效果和圆角，完整显示。
+
+无需记住参数；智能体会转换成受校验的 `photo` 设置。开发用法见 [照片调整说明](references/photo-adjustments.md)，可运行数据见 [调整示例 JSON](demo/photo-adjusted-content.json)。
+
+```sh
+python scripts/render_postcard.py --data demo/photo-adjusted-content.json --image demo/sample.jpg --template demo/editorial-template.html --output outputs/photo-adjusted.html
+```
+
+[打开照片显示调整示例](demo/photo-adjusted-postcard.html)。此例使用 CC0 摄影，采用 85% 不透明度、完整显示和 16px 圆角。桌面预览见 [调整效果](demo/preview-photo-adjusted.png)。
+
 不强制特定斜杠命令或 Codex 的 `$技能名` 语法；已加载状态以目标宿主实际显示和调用为准。
 
 ## 运行依赖与快速预览
@@ -99,7 +117,8 @@ travel-story-postcard/
 ├── references/
 │   ├── examples.md
 │   ├── html-guide.md
-│   └── layout-design.md
+│   ├── layout-design.md
+│   └── photo-adjustments.md
 ├── assets/postcard-template.html
 ├── scripts/render_postcard.py
 ├── tests/test_renderer.py
@@ -111,7 +130,10 @@ travel-story-postcard/
     ├── preview-desktop.png
     ├── editorial-template.html
     ├── editorial-postcard.html
-    └── preview-editorial.png
+    ├── preview-editorial.png
+    ├── photo-adjusted-content.json
+    ├── photo-adjusted-postcard.html
+    └── preview-photo-adjusted.png
 ```
 
 `examples.md` 是假设画面下的写作参考；模板含待替换变量；`demo/` 是真实公开照片与已填好的演示成品，三者不可混称。

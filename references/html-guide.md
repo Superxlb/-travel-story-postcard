@@ -30,6 +30,8 @@ python scripts/render_postcard.py --data demo/example-content.json --image demo/
 
 字段值均为字符串。必填 `title`、`caption`、`recipient`、`story`、`wish`、`photo_alt`。故事用两个换行分段。可选 `location`、`date`、`signature`、`credit`：省略或空串就不显示，日期按用户提供文本，不自动取今天。`photo_alt` 只描述可靠画面；`credit` 用于演示照片来源或用户要求的说明，不放入正文。
 
+以上是文案字段。另可添加结构化 `photo` 对象，控制不透明度、适配、对齐、框比例、衬底色和圆角，详见 [照片调整说明](photo-adjustments.md)。脚本仅接受规定的枚举、数值和颜色，不接受用户原始 CSS。`PHOTO_HTML` 会包含照片框及 img，而不总是单独一个 img。
+
 实际可运行输入见 [example-content.json](../demo/example-content.json)。用户图片与私人 JSON 放在仓库之外的输出目录，避免进入公开仓库。
 
 ## 模板变量和手工替换

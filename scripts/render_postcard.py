@@ -4,6 +4,7 @@ import argparse
 import base64
 import html
 import json
+import math
 import re
 import sys
 from pathlib import Path
@@ -28,6 +29,47 @@ def image_kind(data):
     if data[:4] == b"RIFF" and data[8:12] == b"WEBP":
         return "image/webp", ".webp"
     raise ValueError("Unsupported image: use an actual JPEG, PNG, GIF, or WebP file.")
+
+
+def photo_markup(src, alt, options):
+    """Build CSS only from validated values; never interpolate arbitrary user CSS."""
+    image = '<img src="' + escape(src) + '" alt="' + escape(alt) + '"'
+    if options is None:
+        return image + '>'
+    allowed = {"opacity", "fit", "position", "aspect_ratio", "background", "radius"}
+    if not isinstance(options, dict) or set(options) - allowed:
+        raise ValueError("photo must be an object using documented display options.")
+
+    def number(value, low, high, name):
+        if isinstance(value, bool) or not isinstance(value, (int, float)) or not low <= value <= high or not math.isfinite(value):
+            raise ValueError("Invalid photo " + name)
+        return format(value, ".6g")
+
+    opacity = number(options.get("opacity", 1), 0, 1, "opacity (0..1)")
+    radius = number(options.get("radius", 0), 0, 80, "radius (0..80px)")
+    fit = options.get("fit", "contain")
+    if fit not in ("contain", "cover"):
+        raise ValueError("photo fit must be contain or cover; stretching is not supported.")
+    position = options.get("position", [50, 50])
+    if not isinstance(position, list) or len(position) != 2:
+        raise ValueError("photo position must be [horizontal_percent, vertical_percent].")
+    position = " ".join(number(v, 0, 100, "position (0..100)") + "%" for v in position)
+    background = options.get("background", "#fff9ee")
+    if not isinstance(background, str) or not re.fullmatch(r"#[0-9a-fA-F]{6}", background):
+        raise ValueError("photo background must be a six-digit hex color.")
+    ratio = options.get("aspect_ratio")
+    frame = "display:block;width:100%;min-width:0;overflow:hidden;background:" + background + ";border-radius:" + radius + "px;"
+    style = "display:block;width:100%;max-width:100%;max-height:none;margin:0;opacity:" + opacity + ";object-fit:" + fit + ";object-position:" + position + ";"
+    if ratio is not None:
+        if not isinstance(ratio, list) or len(ratio) != 2:
+            raise ValueError("photo aspect_ratio must be [width, height].")
+        frame += "aspect-ratio:" + "/".join(number(v, 0.01, 1000, "aspect_ratio") for v in ratio) + ";"
+        style += "height:100%;"
+    elif fit == "cover":
+        raise ValueError("cover requires photo aspect_ratio so the crop frame is explicit.")
+    else:
+        style += "height:auto;"
+    return '<div class="postcard-photo-frame" style="' + frame + '">' + image + ' style="' + style + '"></div>'
 
 
 def render(data_path, output, image_path=None, image_mode="embed", description_only=False, template_path=None):
@@ -62,8 +104,10 @@ def render(data_path, output, image_path=None, image_mode="embed", description_o
             src = quote(copied_image.name)
         else:
             src = "data:" + mime + ";base64," + base64.b64encode(image_bytes).decode("ascii")
-        photo = '<img src="' + escape(src) + '" alt="' + escape(data["photo_alt"]) + '">'
+        photo = photo_markup(src, data["photo_alt"], data.get("photo"))
     else:
+        if data.get("photo") is not None:
+            raise ValueError("Photo adjustments require an actual image; omit photo for description-only output.")
         photo = '<div class="missing">未附照片 · 根据画面描述创作<br>' + escape(data["photo_alt"]) + '</div>'
     paragraphs = [p.strip() for p in re.split(r"\n\s*\n", data["story"]) if p.strip()]
     values = {
