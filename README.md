@@ -16,7 +16,7 @@ GitHub 仓库：[Superxlb/-travel-story-postcard](https://github.com/Superxlb/-t
 
 ![真实照片生成的示例成品](demo/preview-desktop.png)
 
-[查看示例 HTML 文件](demo/example-postcard.html) · [课堂演示说明](课堂演示说明.md) · [验证记录](VALIDATION.md)
+[查看示例 HTML 文件](demo/example-postcard.html) · [正式使用说明（Word）](docs/旅行故事明信片技能使用说明.docx) · [课堂演示说明](课堂演示说明.md) · [验证记录](VALIDATION.md)
 
 另一种排版结构：[照片与标题侧栏、背面下置](demo/editorial-postcard.html)。两个示例都使用仓库内 CC0 照片，不限定只能在这两种样式中选择。
 
@@ -35,20 +35,26 @@ GitHub 的文件页通常展示源码；请下载仓库后用浏览器打开 HTM
 
 默认寄给未来的自己，简体中文、温柔自然克制；没有心情时平实记录。支持温柔治愈、轻快俏皮、复古书信、简洁纪实。普通旅游攻略、订酒店、路线规划、纯修图不属于触发范围。
 
-## WorkBuddy 安装：核实范围
+## 选题理由与解决的问题
 
-2026-09-21 查阅了两处官方资料：[开放平台技能结构](https://open.workbuddy.cn/docs/skill)、[客户端技能安装说明](https://www.workbuddy.cn/docs/workbuddy/From-Beginner-to-Expert-Guide/Function-Description/Skills-Market)。官方说明了 `SKILL.md` 的 YAML + Markdown 结构、配套资源以及通过“添加技能 → 上传技能”导入本地包的入口。本包按此补充了中英文描述、版本、作者字段，保留通用 name/description；没有 Codex 专用配置。
+旅行明信片输入简单、结果直观，适合在课堂上演示从理解照片、创作文字到生成文件的完整过程。它也适合练习将提示词、参考资料、模板和工具脚本整理为可重复使用的 Skill。
 
-**没有核实目标客户端版本的“GitHub URL 直接安装”功能，也未实际在 WorkBuddy 内导入本包。** 不把社区目录约定当官方路径，不提供未经核实的安装目录。`assets/` 是本包通过相对路径明确引用的资源目录，随包访问情况需在目标环境验证。
+本技能解决照片配文容易泛化、改收件人需要重写、手工排版反复调整以及 HTML 转发后显示可能变化的问题。它保留照片事实，允许表达与版式变化，并交付固定排版的 PNG。详细操作与真实运行截图见上方 Word 使用说明。
+
+## 安装与加载
+
+本技能面向支持 `SKILL.md` 的 AI Agent，不依赖特定平台的专属 API。不同工具的导入方式和可用能力不同，按实际工具说明加载；文案需要语言能力，照片需要读图能力，文件交付需要文件和截图工具。包内包含通用 `name`、`description`，以及部分宿主使用的展示与版本元数据，不保证所有宿主都接受完全相同的字段。
 
 ### 从 GitHub 获取，再本地导入
 
 1. 在本仓库的 GitHub 页面下载源码 ZIP；发布者如提供 Release，优先取 `travel-story-postcard-skill.zip`。
 2. GitHub 源码 ZIP 通常有外层仓库目录：先解压，找到含 `SKILL.md` 的根目录。如果需要重新打包，压缩该目录中的**内容**，使导入 ZIP 根部直接含 `SKILL.md`、`references/`、`assets/` 等。本次交付的 skill ZIP 已采用这种布局；目标客户端对压缩层级的解析仍需实际导入验证。
-3. WorkBuddy 技能页面 → 添加技能 → 上传技能 → 选择本地包。此入口依据上述官方说明；导入若报错，保留错误信息核对当前客户端要求，不盲目复制到猜测目录。
-4. 确认“已安装”中能找到此技能并处于启用状态，然后在对话中选择技能或用下方自然语言明确调用。
+3. 在所用工具的技能管理入口导入 ZIP；如果工具要求目录，则先解压并选择含 `SKILL.md` 的目录。导入报错时按当前宿主的格式要求检查，不猜测安装路径。
+4. 确认技能已安装并启用，然后在对话中选择技能或用下方自然语言明确调用。
 
-这条路径是“GitHub 分发 + 本地导入”，不是声称 WorkBuddy 支持直接粘贴仓库 URL。暂未发布到 GitHub 时，也可直接导入本次随附 ZIP。
+作业提交包的外层同时包含 Word 使用说明和内层 `travel-story-postcard-skill.zip`，应导入内层技能 ZIP。所有公开示例均使用 CC0 摄影，未包含用户上传的私人照片及对应成品。
+
+WorkBuddy 是一种可选宿主。2026-09-21 查阅的[官方安装说明](https://www.workbuddy.cn/docs/workbuddy/From-Beginner-to-Expert-Guide/Function-Description/Skills-Market)提供“添加技能 → 上传技能”入口，[官方结构说明](https://open.workbuddy.cn/docs/skill)说明了技能文件和元数据。该客户端导入未实测；其他工具使用其实际支持的加载方式。
 
 ### 更新
 
@@ -129,6 +135,7 @@ travel-story-postcard/
 ├── README.md
 ├── VALIDATION.md
 ├── 课堂演示说明.md
+├── docs/旅行故事明信片技能使用说明.docx
 ├── references/
 │   ├── examples.md
 │   ├── html-guide.md
@@ -165,7 +172,7 @@ travel-story-postcard/
 
 ## 测试与公开交付
 
-运行脚本检查：`python -m unittest discover -s tests -v`。实际浏览器检查、文本行为检查和未完成的 WorkBuddy 集成验证，分别列在 [VALIDATION.md](VALIDATION.md)。这不是专业印刷包；普通浏览器打印结果需要检查分页。
+运行脚本检查：`python -m unittest discover -s tests -v`。实际浏览器检查、文本行为检查和宿主集成验证范围，分别列在 [VALIDATION.md](VALIDATION.md)。这不是专业印刷包；普通浏览器打印结果需要检查分页。
 
 可选浏览器导出检查：`node tests/test_export.cjs 实际浏览器路径`，验证真实截图、拒绝覆盖及坏图/外部资源/缺失区域/溢出的失败处理。测试环境需具备上述 PNG 依赖。
 
