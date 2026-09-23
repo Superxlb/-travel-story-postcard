@@ -16,7 +16,7 @@ GitHub 仓库：[Superxlb/-travel-story-postcard](https://github.com/Superxlb/-t
 
 ![真实照片生成的示例成品](demo/preview-desktop.png)
 
-[查看示例 HTML 文件](demo/example-postcard.html) · [正式使用说明（Word）](docs/旅行故事明信片技能使用说明.docx) · [课堂演示说明](课堂演示说明.md) · [验证记录](VALIDATION.md)
+[查看示例 HTML 文件](demo/example-postcard.html) · [正式使用说明（Word）](docs/旅行故事明信片技能使用说明.docx) · [验证记录](VALIDATION.md)
 
 另一种排版结构：[照片与标题侧栏、背面下置](demo/editorial-postcard.html)。两个示例都使用仓库内 CC0 照片，不限定只能在这两种样式中选择。
 
@@ -134,7 +134,6 @@ travel-story-postcard/
 ├── SKILL.md
 ├── README.md
 ├── VALIDATION.md
-├── 课堂演示说明.md
 ├── docs/旅行故事明信片技能使用说明.docx
 ├── references/
 │   ├── examples.md
